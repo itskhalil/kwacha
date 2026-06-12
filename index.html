@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kwacha — Chichewa Trainer</title>
+<meta name="theme-color" content="#0E3540">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kwacha">
+<link rel="manifest" href='data:application/manifest+json,{"name":"Kwacha — Chichewa Trainer","short_name":"Kwacha","start_url":"./","display":"standalone","background_color":"%23EDF3F1","theme_color":"%230E3540"}'>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E3540; --bg:#EDF3F1; --card:#FFFFFF; --sun:#E4572E; --reed:#2E7D5B;
+  --sand:#D8C7A4; --night:#0B232B; --mut:#5C7780; --line:#CCDAD6;
+  --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:440px;margin:0 auto;padding:18px 16px 40px;min-height:100%}
+h1,h2,.disp{font-family:"Bricolage Grotesque",Inter,sans-serif}
+header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+header h1{font-size:26px;font-weight:800;letter-spacing:-.02em}
+header h1 span{color:var(--sun)}
+.tag{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.12em}
+.sunbox{position:relative;margin:10px 0 14px}
+.sunbox svg{display:block;width:100%;height:auto}
+.counts{display:flex;gap:10px;margin:0 0 14px}
+.pill{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;text-align:center}
+.pill b{display:block;font-size:22px;font-family:"Bricolage Grotesque";font-weight:800}
+.pill span{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+button{font:inherit;cursor:pointer;border:none;border-radius:var(--r)}
+.big{width:100%;padding:16px;background:var(--ink);color:#fff;font-weight:600;font-size:17px;margin-bottom:10px}
+.big:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;margin-bottom:10px}
+.row button{flex:1;padding:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);font-weight:500}
+.set{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-top:14px}
+.set h2{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--mut);margin-bottom:10px;font-weight:600}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:7px 0;font-size:14px}
+.step{display:flex;align-items:center;gap:8px}
+.step button{width:34px;height:34px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:18px;line-height:1}
+.step b{min-width:54px;text-align:center;font-family:"Bricolage Grotesque";font-size:17px}
+.note{font-size:12px;color:var(--mut);margin-top:8px;line-height:1.5}
+.note a{color:var(--sun)}
+/* review */
+.cardv{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px 20px;min-height:240px;display:flex;flex-direction:column;justify-content:center;text-align:center;margin-bottom:12px;position:relative}
+.chip{position:absolute;top:12px;left:14px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--mut)}
+.chip2{position:absolute;top:12px;right:14px;font-size:10px;color:var(--mut)}
+.front{font-size:24px;font-weight:600;line-height:1.3}
+.back .ny{font-family:"Bricolage Grotesque";font-size:30px;font-weight:800;line-height:1.2;margin-bottom:8px}
+.back .en{font-size:15px;color:var(--mut);margin-bottom:10px}
+.gloss{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--reed);line-height:1.5}
+.grades{display:flex;gap:10px}
+.grades button{flex:1;padding:15px 8px;font-weight:600;color:#fff;font-size:15px}
+.g-again{background:var(--sun)} .g-good{background:var(--reed)} .g-easy{background:var(--ink)}
+.reveal{width:100%;padding:16px;background:var(--ink);color:#fff;font-weight:600;font-size:16px}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--sun);border-radius:99px;transition:width .3s}
+.topnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:14px}
+.topnav button{background:none;color:var(--mut);font-weight:500;padding:6px}
+/* browse + add */
+input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);margin-bottom:10px}
+.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+.bitem b{font-family:"Bricolage Grotesque";font-weight:600}
+.bitem span{color:var(--mut)}
+.dchip{display:inline-block;font-size:10px;color:var(--mut);margin-left:6px}
+.done{ text-align:center;padding:30px 10px}
+.done .disp{font-size:28px;font-weight:800;margin:10px 0 6px}
+.warn{background:#FBEAE3;border:1px solid #EFC4B4;color:#8C3A1F;border-radius:14px;padding:10px 12px;font-size:13px;margin-bottom:12px;display:none}
+.hide{display:none!important}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="warn" class="warn">Storage isn’t available here — progress won’t persist this session.</div>
+
+  <!-- HOME -->
+  <div id="home">
+    <header><h1>Kwa<span>ch</span>a</h1><div class="tag">Chichewa · Lake traverse</div></header>
+    <div class="sunbox">
+      <svg viewBox="0 0 400 150" aria-label="Daily progress sunrise">
+        <defs><clipPath id="sky"><rect x="0" y="0" width="400" height="112"/></clipPath></defs>
+        <circle id="sun" cx="200" cy="190" r="42" fill="#E4572E" clip-path="url(#sky)"/>
+        <rect x="0" y="112" width="400" height="3" fill="#0E3540"/>
+        <path d="M0 130 q 20 -7 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0" stroke="#9FBCB6" stroke-width="2.5" fill="none"/>
+        <path d="M0 142 q 20 -6 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0" stroke="#C2D6D1" stroke-width="2" fill="none"/>
+        <text id="suntxt" x="200" y="100" text-anchor="middle" font-family="Bricolage Grotesque,Inter" font-weight="800" font-size="20" fill="#0E3540"></text>
+      </svg>
+    </div>
+    <div class="counts">
+      <div class="pill"><b id="cDue">0</b><span>due</span></div>
+      <div class="pill"><b id="cNew">0</b><span>new</span></div>
+      <div class="pill"><b id="cSeen">0</b><span>learned</span></div>
+      <div class="pill"><b id="cStreak">0</b><span>streak</span></div>
+    </div>
+    <button class="big" id="start">Start today’s session</button>
+    <div class="row">
+      <button id="goBrowse">Browse deck</button>
+      <button id="goAdd">Add a card</button>
+    </div>
+    <div class="set">
+      <h2>Settings</h2>
+      <div class="srow"><span>Curriculum day</span>
+        <div class="step"><button id="dayDn">−</button><b><span id="dayV">1</span>/21</b><button id="dayUp">+</button></div></div>
+      <div class="srow"><span>New cards per day</span>
+        <div class="step"><button id="npdDn">−</button><b id="npdV">15</b><button id="npdUp">+</button></div></div>
+      <div class="srow"><span>Direction</span><button id="dirBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600"></button></div>
+      <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="review" class="hide">
+    <div class="topnav"><button id="quit">← End session</button><span class="tag" id="qleft"></span></div>
+    <div class="bar"><i id="barfill" style="width:0%"></i></div>
+    <div class="cardv" id="cardv">
+      <span class="chip" id="cchip"></span><span class="chip2" id="cday"></span>
+      <div id="cfront" class="front"></div>
+      <div id="cback" class="back hide">
+        <div class="ny" id="bny"></div>
+        <div class="en" id="ben"></div>
+        <div class="gloss" id="bgl"></div>
+      </div>
+    </div>
+    <button class="reveal" id="revealBtn">Show answer</button>
+    <div class="grades hide" id="grades">
+      <button class="g-again" id="gA">Didn’t get it</button>
+      <button class="g-good" id="gG">Got it</button>
+    </div>
+    <div class="done hide" id="doneBox">
+      <svg viewBox="0 0 120 70" width="120"><circle cx="60" cy="55" r="30" fill="#E4572E"/><rect x="0" y="55" width="120" height="3" fill="#0E3540"/></svg>
+      <div class="disp">Kwacha!</div>
+      <div class="note">“The sun has risen.” Session complete — see you tomorrow.</div>
+      <button class="big" id="doneMore" style="margin-top:16px;background:var(--card);color:var(--ink);border:1px solid var(--line)">Keep going — extra round</button>
+      <button class="big" id="doneHome" style="margin-top:4px">Back home</button>
+    </div>
+  </div>
+
+  <!-- BROWSE -->
+  <div id="browse" class="hide">
+    <div class="topnav"><button id="bBack">← Home</button><span class="tag">Deck</span></div>
+    <input id="bSearch" placeholder="Search Chichewa or English…">
+    <select id="bDay"></select>
+    <div id="bList"></div>
+  </div>
+
+  <!-- ADD -->
+  <div id="add" class="hide">
+    <div class="topnav"><button id="aBack">← Home</button><span class="tag">Add a card</span></div>
+    <input id="aNy" placeholder="Chichewa — e.g. Ndili ndi mphamvu">
+    <input id="aEn" placeholder="English — e.g. I am strong">
+    <input id="aGl" placeholder="Gloss / note (optional)">
+    <button class="big" id="aSave">Save card</button>
+    <div class="note">Cards you add join today’s new-card queue. Use this constantly in Malawi — every word a fisherman or homestay kid teaches you goes in here.</div>
+  </div>
+</div>
+
+<script>
+// ---------------- DECK: [day, chichewa, english, gloss, category] ----------------
+const D=[
+[1,"Moni","Hello","universal greeting, any time of day","greet"],
+[1,"Muli bwanji?","How are you? (polite)","mu-li bwanji = you-are how","greet"],
+[1,"Ndili bwino","I am fine","ndi-li = I-am","greet"],
+[1,"Kaya inu?","And you?","standard bounce-back after Ndili bwino","greet"],
+[1,"Zikomo","Thank you","also: excuse me","greet"],
+[1,"Zikomo kwambiri","Thank you very much","kwambiri = very/much","greet"],
+[1,"Inde","Yes","","greet"],
+[1,"Ayi","No","","greet"],
+[1,"Chonde","Please","","greet"],
+[1,"Pepani","Sorry / excuse me","","greet"],
+[1,"Eya","Yeah (casual)","","greet"],
+[1,"Bwino","Good / fine","","greet"],
+[1,"Tionana","See you later","ti-onana = we-see-each-other","greet"],
+[1,"Odi!","'Knock knock' — called at a doorway","say it before entering any home","greet"],
+[1,"Lowani","Come in","reply to Odi!","greet"],
+[2,"Mwadzuka bwanji?","Good morning (How did you wake?)","mwa-dzuka = you-have-woken","greet"],
+[2,"Ndadzuka bwino","I woke well (morning reply)","","greet"],
+[2,"Mwaswera bwanji?","Good afternoon (How's your day been?)","","greet"],
+[2,"Ndaswera bwino","My day has been good","","greet"],
+[2,"Gonani bwino","Sleep well","gon- = sleep, -ani = polite plural","greet"],
+[2,"Pitani bwino","Go well (to someone leaving)","","greet"],
+[2,"Tsalani bwino","Stay well (when you leave)","","greet"],
+[2,"Dzina lanu ndani?","What is your name?","dzina = name","greet"],
+[2,"Dzina langa ndi ___","My name is ___","","greet"],
+[2,"Ndasangalala kukumana nanu","Pleased to meet you","-sangalala = be happy","greet"],
+[2,"Mukuchokera kuti?","Where are you from / coming from?","mu-ku-choker-a kuti = you-PRES-come.from where","trail"],
+[2,"Ndine wa ku Ireland","I'm from Ireland","ndine = I am","greet"],
+[2,"abambo","sir / father (respectful address)","","greet"],
+[2,"amayi","madam / mother (respectful address)","","greet"],
+[2,"mfumu","chief","the person to ask before camping","camp"],
+[3,"Ndikufuna ___","I want ___","ndi-ku-fun-a = I-PRES-want — THE template","verb"],
+[3,"Ndikufuna madzi","I want water","","verb"],
+[3,"Mukufuna chiyani?","What do you want?","","verb"],
+[3,"Ndikupita","I am going","ndi-ku-pit-a","verb"],
+[3,"Ndikupita ku ___","I'm going to ___","ku = to (place)","verb"],
+[3,"Mukupita kuti?","Where are you going?","you'll hear this constantly","trail"],
+[3,"Ndikubwera","I am coming","-bwera = come","verb"],
+[3,"Akubwera","He/she is coming","a- = he/she","verb"],
+[3,"Ndikudya","I am eating","-dya = eat","verb"],
+[3,"Ndikumwa","I am drinking","-mwa = drink","verb"],
+[3,"Ndikuphunzira Chichewa","I am learning Chichewa","-phunzira = learn — instant goodwill","verb"],
+[3,"Tikupita","We are going","ti- = we","verb"],
+[3,"Ndikugona","I am sleeping / off to sleep","-gona = sleep","verb"],
+[3,"Ndikuyenda","I am walking / traveling","-yenda = walk, travel","verb"],
+[3,"Sindikufuna","I don't want","si- = not","verb"],
+[4,"___ ali kuti?","Where is ___?","ali = is (people/animates)","q"],
+[4,"Madzi ali kuti?","Where is water?","","q"],
+[4,"Chimbudzi chili kuti?","Where is the toilet?","chi-noun takes chili","q"],
+[4,"Msika uli kuti?","Where is the market?","","q"],
+[4,"Kuti?","Where?","","q"],
+[4,"Chiyani?","What?","","q"],
+[4,"Ndani?","Who?","","q"],
+[4,"Liti?","When?","","q"],
+[4,"Bwanji?","How?","","q"],
+[4,"Ndi chiyani ichi?","What is this?","point at anything — instant vocab lesson","q"],
+[4,"Kodi…","(turns a statement into a yes/no question)","Kodi muli ndi madzi? = Do you have water?","q"],
+[4,"Kodi mukulankhula Chingerezi?","Do you speak English?","-lankhula = speak","q"],
+[4,"Sindikumva","I don't understand","lit. I'm not hearing","q"],
+[4,"Ndikumva pang'ono","I understand a little","","q"],
+[4,"Chonde, bwerezani","Please say that again","-bwereza = repeat","q"],
+[4,"Pang'onopang'ono","Slowly / little by little","also the answer to 'how's the Chichewa going?'","q"],
+[5,"-modzi","one","chimodzi / imodzi depending on noun","num"],
+[5,"-wiri","two","ziwiri / awiri…","num"],
+[5,"-tatu","three","","num"],
+[5,"-nayi","four","","num"],
+[5,"-sanu","five","","num"],
+[5,"khumi","ten","","num"],
+[5,"ndalama","money","","num"],
+[5,"kwacha","kwacha (the currency)","also: 'the sun has risen'","num"],
+[5,"Ndalama zingati?","How much money?","zingati = how many","num"],
+[5,"Mtengo wake ndi bwanji?","What's the price?","mtengo = price","num"],
+[5,"Zikomo, basi","Thanks, that's all","basi = enough/that's it","num"],
+[5,"Ndilibe ndalama","I don't have money","ndi-li-be = I-am-without","num"],
+[5,"Chonde chepetsani","Please lower (the price)","-chepetsa = reduce","num"],
+[5,"Kwambiri!","Too much!","","num"],
+[5,"(numbers 6+)","Prices are usually said in English numbers","listen for English numbers in the market","num"],
+[6,"madzi","water","","food"],
+[6,"madzi akumwa","drinking water","a-ku-mwa = of-to-drink","food"],
+[6,"chakudya","food","cha-ku-dya = thing-of-eating","food"],
+[6,"nsima","nsima (maize staple)","you will eat mountains of this","food"],
+[6,"nsomba","fish","chambo is the famous lake fish","food"],
+[6,"mpunga","rice","","food"],
+[6,"mazira","eggs","","food"],
+[6,"nkhuku","chicken","","food"],
+[6,"mkaka","milk","","food"],
+[6,"tiyi","tea","","food"],
+[6,"Ndili ndi njala","I'm hungry","lit. I am with hunger","food"],
+[6,"Ndili ndi ludzu","I'm thirsty","lit. I am with thirst","food"],
+[6,"Kodi muli ndi madzi?","Do you have water?","muli ndi = you have","food"],
+[6,"Ndikufuna kugula chakudya","I want to buy food","ku-gula = to buy","food"],
+[6,"Chokoma!","Delicious!","-koma = be tasty","food"],
+[6,"Ndakhuta","I'm full","the polite way to stop being fed","food"],
+[7,"Mukugulitsa chiyani?","What are you selling?","-gulitsa = sell (cause-to-buy)","market"],
+[7,"Ndikufuna kugula ___","I want to buy ___","","market"],
+[7,"Ndipatseni ___","Give me ___ (polite)","ndi-pats-eni = me-give-you(pl)","market"],
+[7,"Ndipatseni madzi, chonde","Please give me water","","market"],
+[7,"nthochi","banana(s)","","food"],
+[7,"mango","mango","","food"],
+[7,"mbatata","potato / sweet potato","","food"],
+[7,"mkate","bread","","food"],
+[7,"zovala","clothes","","market"],
+[7,"njinga","bicycle","also bicycle-taxi in towns","market"],
+[8,"msika","market","","market"],
+[8,"golosale","small shop / grocery","","market"],
+[8,"Mtengo bwanji?","How much?","the everyday short form","market"],
+[8,"Ndi wokwera mtengo","It's expensive","lit. the price climbs","market"],
+[8,"wotsika mtengo","cheap","lit. price descends","market"],
+[8,"Chonde chepetsani mtengo","Please reduce the price","","market"],
+[8,"Ndikupereka ___ kwacha","I'll give ___ kwacha","-pereka = hand over","market"],
+[8,"Ayi, zikomo","No, thank you","","market"],
+[8,"Ndikungoyang'ana","I'm just looking","-ngo- = just, -yang'ana = look","market"],
+[8,"Ndatenga","I'll take it","lit. I have taken","market"],
+[8,"chimanga","maize","","food"],
+[8,"matimati","tomatoes","","food"],
+[8,"anyezi","onions","","food"],
+[8,"mchere","salt","","food"],
+[8,"shuga","sugar","","food"],
+[9,"kumanja","right (direction)","","dir"],
+[9,"kumanzere","left","","dir"],
+[9,"patsogolo","ahead / in front","","dir"],
+[9,"kumbuyo","behind","","dir"],
+[9,"pafupi","near","","dir"],
+[9,"kutali","far","","dir"],
+[9,"Kodi ndi kutali?","Is it far?","","dir"],
+[9,"msewu","road","","dir"],
+[9,"njira","path / trail","your word for two months","dir"],
+[9,"mudzi","village","","dir"],
+[9,"tauni","town","","dir"],
+[9,"nyanja","lake","Lake Malawi = Nyanja ya Malawi","dir"],
+[9,"mtsinje","river","","dir"],
+[9,"phiri","mountain / hill","Mulanje = the big one","dir"],
+[9,"Njira yopita ku ___ ili kuti?","Where is the path to ___?","","dir"],
+[9,"Nditsogolereni, chonde","Please show me the way","-tsogolera = lead","dir"],
+[10,"tenti","tent","","camp"],
+[10,"Ndingathe kumanga tenti pano?","May I pitch my tent here?","ndi-nga-th-e = I-can-able(SUBJ) → 'may I'","camp"],
+[10,"Ndingathe kugona pano?","May I sleep here?","same -nga- pattern","camp"],
+[10,"usiku umodzi","one night","","camp"],
+[10,"Mfumu ali kuti?","Where is the chief?","ask the chief first — it's the custom","camp"],
+[10,"Ndikufuna kuonana ndi mfumu","I'd like to meet the chief","-onana ndi = meet with","camp"],
+[10,"moto","fire","","camp"],
+[10,"Ndingathe kusonkha moto?","May I light a fire?","","camp"],
+[10,"Ndili ndekha","I am alone / traveling alone","","camp"],
+[10,"Palibe vuto","No problem","palibe = there isn't, vuto = problem","camp"],
+[10,"Zikomo chifukwa cha malo","Thank you for the spot","chifukwa cha = because of / for","camp"],
+[10,"malo","place / spot","malo ogona = a place to sleep","camp"],
+[10,"Ndichoka m'mawa","I'll leave in the morning","-choka = depart","camp"],
+[10,"usiku","night","","camp"],
+[10,"mtendere","peace","","camp"],
+[11,"mvuu","hippo","Malawi's most dangerous animal — ask always","water"],
+[11,"ng'ona","crocodile","","water"],
+[11,"Kodi kuli mvuu pano?","Are there hippos here?","ku-li = there-is","water"],
+[11,"Kodi kuli ng'ona?","Are there crocodiles?","","water"],
+[11,"Kodi ndi bwino kusambira pano?","Is it OK to swim here?","-sambira = swim","water"],
+[11,"Zoopsa!","Dangerous!","if you hear this, believe it","water"],
+[11,"Ndi bwino","It's fine / it's good","","water"],
+[11,"Osasambira apa!","Don't swim here! (recognition)","osa- = don't","water"],
+[11,"mafunde","waves","","water"],
+[11,"mphepo","wind","","water"],
+[11,"mphepo yamphamvu","strong wind","mphamvu = strength","water"],
+[11,"bwato","boat / canoe","","water"],
+[11,"ngalawa","dugout canoe","","water"],
+[11,"Madzi ndi ozama","The water is deep","-zama = be deep","water"],
+[11,"asodzi","fishermen","your best safety intel on every beach","water"],
+[12,"Mukupita kuti?","Where are you going? (trail Q1)","answer + smile = friend made","trail"],
+[12,"Ndikupita ku Nkhata Bay","I'm going to Nkhata Bay","swap in any place","trail"],
+[12,"Mukuchokera kuti?","Where are you coming from? (trail Q2)","","trail"],
+[12,"Ndikuchokera ku Monkey Bay","I'm coming from Monkey Bay","","trail"],
+[12,"lero","today","","trail"],
+[12,"mawa","tomorrow","","trail"],
+[12,"dzulo","yesterday","","trail"],
+[12,"Ndikupita ku Likoma mawa","I'm going to Likoma tomorrow","present + time word = no tense needed","trail"],
+[12,"Ndikuthamanga","I'm running","-thamanga = run","trail"],
+[12,"Ndikupalasa bwato","I'm paddling a boat/kayak","-palasa = paddle/pedal","trail"],
+[12,"ulendo","journey","","trail"],
+[12,"ulendo wautali","a long journey","-utali = long","trail"],
+[12,"Ndikuyenda ulendo kudutsa Malawi","I'm traveling across Malawi","-dutsa = pass through","trail"],
+[12,"mzungu / azungu","white person / foreigners","you'll hear it 100×/day; it's friendly","trail"],
+[12,"Malawi ndi dziko lokongola","Malawi is a beautiful country","dziko = country, -kongola = beautiful","trail"],
+[13,"banja","family","","home"],
+[13,"mwana / ana","child / children","","home"],
+[13,"nyumba","house","","home"],
+[13,"Nyumba yanu ndi yokongola","Your house is lovely","","home"],
+[13,"Zikomo chifukwa cha chakudya","Thank you for the food","say it every meal","home"],
+[13,"Ndili ndi tulo","I'm sleepy","tulo = sleep(iness)","home"],
+[13,"Ndikufuna kugona","I'd like to sleep","","home"],
+[13,"Ndidzuka m'mawa","I'll get up in the morning","","home"],
+[13,"m'mawa","morning","","time"],
+[13,"madzulo","evening","","time"],
+[13,"Kodi ndingathandize?","Can I help?","the magic homestay phrase","home"],
+[13,"Ndikufuna kusamba","I'd like to wash / bathe","-samba = bathe","home"],
+[13,"bafa","bathing place / washroom","","home"],
+[13,"Muli ndi ana angati?","How many children do you have?","angati = how many","home"],
+[13,"Banja langa lili ku Ireland","My family is in Ireland","","home"],
+[14,"Odi! Ndingathe kulowa?","Knock knock! May I come in?","-lowa = enter","camp"],
+[14,"Ndikufuna malo ogona","I'm looking for a place to sleep","malo o-gona = place of-sleeping","camp"],
+[14,"Kodi pali malo ogona pafupi?","Is there a place to sleep nearby?","pa-li = there-is","camp"],
+[14,"Ndilipira","I will pay","-lipira = pay","camp"],
+[14,"Mundithandize?","Can you help me?","mu-ndi-thandiz-e = you-me-help(SUBJ)","q"],
+[14,"Palibe","There isn't / none","","q"],
+[14,"Pali","There is","","q"],
+[14,"ine","me / as for me","","q"],
+[14,"inu","you (polite)","","q"],
+[14,"ife","we / us","","q"],
+[15,"Thandizeni!","Help (me)!","emergency word #1","health"],
+[15,"Ndikufuna thandizo","I need help","thandizo = help (noun)","health"],
+[15,"Ndikudwala","I am sick","-dwala = be ill","health"],
+[15,"chipatala","hospital / clinic","","health"],
+[15,"Chipatala chili kuti?","Where is the clinic?","","health"],
+[15,"mankhwala","medicine","","health"],
+[15,"malungo","malaria / fever","","health"],
+[15,"Ndili ndi malungo","I have malaria / a fever","take this one seriously","health"],
+[15,"Mutu ukupweteka","(My) head hurts","-pweteka = hurt","health"],
+[15,"M'mimba mukupweteka","(My) stomach hurts","","health"],
+[15,"madzi oyera","clean water","-yera = be clean/white","health"],
+[15,"Ndatopa","I'm tired","a runner's staple","health"],
+[15,"Ndili bwino, zikomo","I'm OK, thanks","wave off concern","health"],
+[15,"Ndasochera","I'm lost","-sochera = get lost","health"],
+[15,"polisi","police","","health"],
+[15,"Pang'ono pang'ono, chonde","Slowly, please","when answers come too fast","health"],
+[16,"tsopano","now","","time"],
+[16,"panopa","right now","","time"],
+[16,"nthawi","time","","time"],
+[16,"Nthawi yanji?","What time is it?","","time"],
+[16,"Lolemba","Monday","","time"],
+[16,"Lachiwiri","Tuesday","lit. day-two","time"],
+[16,"Lachitatu","Wednesday","day-three","time"],
+[16,"Lachinayi","Thursday","day-four","time"],
+[16,"Lachisanu","Friday","day-five","time"],
+[16,"Loweruka","Saturday","","time"],
+[16,"Lamlungu","Sunday","","time"],
+[16,"sabata","week","","time"],
+[16,"masana","midday / afternoon","","time"],
+[17,"mvula","rain","","wx"],
+[17,"Mvula ikubwera","Rain is coming","","wx"],
+[17,"dzuwa","sun","","wx"],
+[17,"mitambo","clouds","","wx"],
+[17,"Kukutentha","It's hot","-tentha = be hot","wx"],
+[17,"Kukuzizira","It's cold","-zizira = be cold","wx"],
+[17,"Mphepo ikuwomba","The wind is blowing","-womba = blow","wx"],
+[17,"Nyanja ili bwanji lero?","How is the lake today?","your daily go/no-go question","wx"],
+[17,"Mafunde ndi akulu","The waves are big","-kulu = big","wx"],
+[17,"Madzi ali bata","The water is calm","bata = calm","wx"],
+[17,"mchenga","sand / beach","","wx"],
+[17,"mwezi","moon / month","miyezi iwiri = two months","wx"],
+[17,"nyenyezi","stars","","wx"],
+[18,"Ndimakonda ___","I like ___","ndi-ma-kond-a; -ma- = habitually","talk"],
+[18,"Ndimakonda Malawi","I love Malawi","say it often, mean it","talk"],
+[18,"Ndimakonda nsima","I like nsima","","talk"],
+[18,"Mumagwira ntchito yanji?","What work do you do? (recognition)","-gwira ntchito = do work","talk"],
+[18,"ntchito","work","","talk"],
+[18,"Ndine mlendo","I'm a visitor / guest","mlendo = guest, stranger","talk"],
+[18,"alendo","visitors / guests","","talk"],
+[18,"Anthu a ku Malawi ndi okoma mtima","Malawians are kind-hearted","lit. sweet-hearted","talk"],
+[18,"okoma mtima","kind / kind-hearted","","talk"],
+[18,"Kwathu ndi ku Ireland","My home is Ireland","kwathu = our home","talk"],
+[18,"Kuno ndi kokongola","It's beautiful here","kuno = here","talk"],
+[18,"Ndasangalala","I'm happy / I've enjoyed myself","","talk"],
+[18,"bwenzi / abwenzi","friend / friends","","talk"],
+[18,"Ndabwera kudzaona Malawi","I've come to see Malawi","","talk"],
+[19,"-na-","(past marker — recognize only)","ndinapita = I went","listen"],
+[19,"-dza-","(future marker — recognize only)","ndidzabwera = I will come","listen"],
+[19,"Mwafika!","You've arrived! (welcome)","","listen"],
+[19,"Takulandirani","Welcome (we receive you)","","listen"],
+[19,"Bola","at least / could be worse","very common reply","listen"],
+[19,"Tiye!","Let's go!","","listen"],
+[19,"mwina","maybe","","listen"],
+[19,"komano","but / however","","listen"],
+[20,"Mwina mawa","Maybe tomorrow","","talk"],
+[20,"Sindikudziwa","I don't know","-dziwa = know","talk"],
+[20,"Ndikudziwa","I know","","talk"],
+[20,"Chabwino","OK / alright","","talk"],
+[20,"zonse","everything / all","","talk"],
+[20,"china chake","something","","talk"],
+[20,"Palibe vuto","No problem","anchor phrase — review","talk"],
+[20,"Zikomo kwambiri, tionana","Many thanks, see you","","talk"],
+[21,"Ndine ___","I am ___ (your name)","","me"],
+[21,"Ndine wothamanga","I'm a runner","wo-thamang-a = one-who-runs","me"],
+[21,"Ndikupalasa kayak pa nyanja","I'm paddling a kayak on the lake","","me"],
+[21,"masiku ambiri","many days","masiku = days","me"],
+[21,"Ndili pa ulendo wa miyezi iwiri","I'm on a two-month journey","miyezi iwiri = two months","me"]
+];
+
+// ---------------- STATE ----------------
+const KEY="chichewa-trainer-v1";
+let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
+let mem=false;
+const today=()=>new Date().toISOString().slice(0,10);
+async function load(){
+  if(window.storage){ // claude.ai artifact storage
+    try{ const r=await window.storage.get(KEY); if(r&&r.value) S=Object.assign(S,JSON.parse(r.value)); }catch(e){}
+    return;
+  }
+  try{ // local file / normal browser: use localStorage
+    const v=localStorage.getItem(KEY); if(v) S=Object.assign(S,JSON.parse(v));
+    localStorage.setItem(KEY+"-probe","1"); localStorage.removeItem(KEY+"-probe");
+  }catch(e){ mem=true; document.getElementById("warn").style.display="block"; }
+}
+async function save(){
+  if(mem) return;
+  try{
+    if(window.storage){ await window.storage.set(KEY,JSON.stringify(S)); }
+    else{ localStorage.setItem(KEY,JSON.stringify(S)); }
+  }catch(e){}
+}
+function allCards(){
+  const base=D.map((c,i)=>({id:"d"+i,day:c[0],ny:c[1],en:c[2],gl:c[3],cat:c[4]}));
+  return base.concat(S.custom);
+}
+function dueCards(){
+  const now=Date.now();
+  return allCards().filter(c=>S.prog[c.id]&&S.prog[c.id].d<=now);
+}
+function newCards(){
+  if(S.intro.date!==today()){S.intro={date:today(),n:0};}
+  const room=Math.max(0,S.npd-S.intro.n);
+  return allCards().filter(c=>c.day<=S.day&&!S.prog[c.id]).slice(0,room);
+}
+function seenCount(){return Object.keys(S.prog).length;}
+
+// ---------------- HOME ----------------
+const $=id=>document.getElementById(id);
+function show(v){["home","review","browse","add"].forEach(x=>$(x).classList.toggle("hide",x!==v));}
+function renderHome(){
+  $("cDue").textContent=dueCards().length;
+  $("cNew").textContent=newCards().length;
+  $("cSeen").textContent=seenCount();
+  $("cStreak").textContent=S.streak;
+  $("dayV").textContent=S.day; $("npdV").textContent=S.npd;
+  $("dirBtn").textContent=S.dir==="EN2NY"?"EN → Chichewa":"Chichewa → EN";
+  const tot=dueCards().length+newCards().length;
+  if(tot>0){ $("start").disabled=false; $("start").textContent="Start today's session ("+tot+")"; }
+  else { const ex=extraAvail(); $("start").disabled=!ex; $("start").textContent=ex?"Done for today — extra round?":"All done — kwacha!"; }
+  setSun(S.lastDone===today()?1:0);
+}
+function setSun(p){ // p 0..1 → sun rises
+  const cy=190-(190-62)*p;
+  $("sun").setAttribute("cy",cy);
+  $("suntxt").textContent=p>=1?"kwacha — the sun has risen":"";
+}
+$("dayUp").onclick=()=>{S.day=Math.min(21,S.day+1);save();renderHome();};
+$("dayDn").onclick=()=>{S.day=Math.max(1,S.day-1);save();renderHome();};
+$("npdUp").onclick=()=>{S.npd=Math.min(30,S.npd+5);save();renderHome();};
+$("npdDn").onclick=()=>{S.npd=Math.max(0,S.npd-5);save();renderHome();};
+$("dirBtn").onclick=()=>{S.dir=S.dir==="EN2NY"?"NY2EN":"EN2NY";save();renderHome();};
+$("goBrowse").onclick=()=>{renderBrowse();show("browse");};
+$("goAdd").onclick=()=>show("add");
+
+// ---------------- REVIEW ----------------
+let Q=[],qi=0,qTotal=0,curr=null;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+// extra round: uncapped practice over ALL cards from days <= today, weakest first.
+// passes never touch the schedule; fails are real (unseen cards that fail enter learning).
+function extraPool(){ return allCards().filter(c=>c.day<=S.day); }
+function extraAvail(){ return extraPool().length>0; }
+function buildExtra(){
+  const pool=shuffle(extraPool()).map(c=>Object.assign({},c,{px:true}));
+  const sc=c=>{const p=S.prog[c.id]; if(!p)return 0; if(p.r===0)return 0.5; return p.i+1-0.2*Math.min(p.l||0,4);};
+  return pool.sort((a,b)=>sc(a)-sc(b));
+}
+function startQueue(q){
+  if(!q.length) return;
+  Q=q; qTotal=Q.length; qi=0; save();
+  $("doneBox").classList.add("hide"); $("cardv").classList.remove("hide");
+  show("review"); nextCard();
+}
+$("start").onclick=()=>{
+  const news=newCards();
+  const due=dueCards();
+  if(due.length+news.length){ S.intro.n+=news.length; startQueue(shuffle(due.concat(news))); }
+  else { startQueue(buildExtra()); }
+};
+function nextCard(){
+  if(!Q.length){return finish();}
+  curr=Q.shift();
+  $("qleft").textContent=(Q.length+1)+" left";
+  $("barfill").style.width=Math.round(100*qi/qTotal)+"%";
+  $("cchip").textContent=curr.cat;
+  $("cday").textContent="day "+curr.day;
+  const front=S.dir==="EN2NY"?curr.en:curr.ny;
+  $("cfront").textContent=front;
+  $("cfront").classList.remove("hide");
+  $("bny").textContent=curr.ny; $("ben").textContent=curr.en;
+  $("bgl").textContent=curr.gl||"";
+  $("cback").classList.add("hide");
+  $("grades").classList.add("hide");
+  $("revealBtn").classList.remove("hide");
+}
+$("revealBtn").onclick=reveal;
+$("cardv").onclick=()=>{ if($("cback").classList.contains("hide")) reveal(); };
+function reveal(){
+  $("cfront").classList.add("hide");
+  $("cback").classList.remove("hide");
+  $("revealBtn").classList.add("hide");
+  $("grades").classList.remove("hide");
+}
+function requeue(){ const pos=4+Math.floor(Math.random()*5); Q.splice(Math.min(pos,Q.length),0,curr); qTotal++; } // re-insert 4-8 cards ahead
+function grade(g){ // g: "A" didn't get it, "G" got it
+  if(curr.px){ // extra-round practice copy: a pass leaves the schedule untouched; a fail is real
+    if(g==="G"){ qi++; nextCard(); return; }
+    curr.px=false;
+  }
+  let p=S.prog[curr.id]||{r:0,i:0,d:0,s:0};
+  const now=Date.now();
+  if(p.r===0){
+    // LEARNING: a new card must be recalled correctly twice in-session to graduate
+    if(g==="A"){ p.s=0; requeue(); }
+    else { if((p.s||0)<1){ p.s=1; requeue(); } else { p.r=1; p.i=1; p.d=now+864e5; } }
+  } else {
+    // REVIEW: capped ladder tuned to a ~90-day horizon (3wk prep + 2mo trip)
+    if(g==="A"){ p.l=(p.l||0)+1; p.r=0; p.s=1; p.i=0; requeue(); } // lapse: relearn in-session, back to 1 day
+    else { p.i=p.i<=1?2:p.i<=2?4:p.i<=4?8:14; p.d=now+p.i*864e5; } // 1→2→4→8→14d cap
+  }
+  S.prog[curr.id]=p; qi++; save(); nextCard();
+}
+$("gA").onclick=()=>grade("A"); $("gG").onclick=()=>grade("G");
+function finish(){
+  if(S.lastDone!==today()){
+    const y=new Date(Date.now()-864e5).toISOString().slice(0,10);
+    S.streak=(S.lastDone===y)?S.streak+1:1;
+    S.lastDone=today(); save();
+  }
+  $("cardv").parentElement&&0;
+  $("cfront").classList.add("hide");$("cback").classList.add("hide");
+  $("grades").classList.add("hide");$("revealBtn").classList.add("hide");
+  $("cardv").classList.add("hide");$("barfill").style.width="100%";
+  $("doneMore").classList.toggle("hide",!extraAvail());
+  $("doneBox").classList.remove("hide");
+}
+$("doneMore").onclick=()=>{ startQueue(buildExtra()); };
+$("doneHome").onclick=()=>{$("cardv").classList.remove("hide");show("home");renderHome();};
+$("quit").onclick=()=>{$("cardv").classList.remove("hide");$("doneBox").classList.add("hide");show("home");renderHome();};
+document.addEventListener("keydown",e=>{
+  if($("review").classList.contains("hide"))return;
+  if(e.code==="Space"&&!$("revealBtn").classList.contains("hide")){e.preventDefault();reveal();}
+  else if(!$("grades").classList.contains("hide")){
+    if(e.key==="1")grade("A"); if(e.key==="2")grade("G");
+  }
+});
+
+// ---------------- BROWSE ----------------
+function renderBrowse(){
+  const sel=$("bDay");
+  if(!sel.options.length){
+    sel.innerHTML='<option value="0">All days</option>'+Array.from({length:21},(_,i)=>'<option value="'+(i+1)+'">Day '+(i+1)+'</option>').join("")+'<option value="99">My cards</option>';
+    sel.onchange=renderBrowse; $("bSearch").oninput=renderBrowse;
+  }
+  const d=+sel.value, q=$("bSearch").value.toLowerCase();
+  const list=allCards().filter(c=>{
+    if(d===99&&!String(c.id).startsWith("u"))return false;
+    if(d>0&&d<99&&c.day!==d)return false;
+    if(q&&!(c.ny.toLowerCase().includes(q)||c.en.toLowerCase().includes(q)))return false;
+    return true;
+  });
+  $("bList").innerHTML=list.map(c=>'<div class="bitem"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div>').join("")||'<div class="note">Nothing matches.</div>';
+}
+$("bBack").onclick=()=>{show("home");renderHome();};
+
+// ---------------- ADD ----------------
+$("aSave").onclick=()=>{
+  const ny=$("aNy").value.trim(),en=$("aEn").value.trim(),gl=$("aGl").value.trim();
+  if(!ny||!en)return;
+  S.custom.push({id:"u"+Date.now(),day:S.day,ny,en,gl,cat:"mine"});
+  $("aNy").value=$("aEn").value=$("aGl").value="";
+  save(); show("home"); renderHome();
+};
+$("aBack").onclick=()=>{show("home");renderHome();};
+
+// ---------------- BOOT ----------------
+if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+load().then(()=>{renderHome();});
+</script>
+</body>
+</html>
