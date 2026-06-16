@@ -110,7 +110,7 @@ input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--li
       <div class="srow"><span>Direction</span><button id="dirBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600"></button></div>
       <div class="srow"><span>Progress backup</span><span><button id="expBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export</button> <button id="impBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Import</button></span></div>
       <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
-      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-16 18:04 UTC</b></div>
+      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-16 18:11 UTC</b></div>
     </div>
   </div>
 
@@ -194,7 +194,7 @@ const D=[
 [2,"amayi","madam / mother (respectful address)","mother — respectful 'madam'","greet"],
 [2,"mfumu","chief","chief","camp"],
 [3,"Ndikufuna ___","I want ___","ndi-ku-funa = I-am-wanting · ___","verb"],
-[20,"Ndikufuna madzi","I want water","ndi-ku-funa = I-want · madzi = water","verb"],
+[3,"Ndikufuna madzi","I want water","ndi-ku-funa = I-want · madzi = water","verb"],
 [3,"Mukufuna chiyani?","What do you want?","mu-ku-funa = you-want · chiyani = what","verb"],
 [3,"Ndikupita","I am going","ndi-ku-pita = I-am-going","verb"],
 [3,"Ndikupita ku ___","I'm going to ___","ndi-ku-pita = I'm-going · ku = to · ___","verb"],
@@ -209,7 +209,7 @@ const D=[
 [20,"Ndikuyenda","I am walking / traveling","ndi-ku-yenda = I-am-walking/traveling","verb"],
 [3,"Sindikufuna","I don't want","si-ndi-ku-funa = not-I-want","verb"],
 [4,"___ ali kuti?","Where is ___?","___ · ali = is · kuti = where","q"],
-[20,"Madzi ali kuti?","Where is water?","madzi = water · ali = is · kuti = where","q"],
+[4,"Madzi ali kuti?","Where is water?","madzi = water · ali = is · kuti = where","q"],
 [4,"Chimbudzi chili kuti?","Where is the toilet?","chimbudzi = toilet · chili = is (chi-class) · kuti = where","q"],
 [20,"Msika uli kuti?","Where is the market?","msika = market · uli = is (u-class) · kuti = where","q"],
 [4,"Kuti?","Where?","where?","q"],
@@ -252,7 +252,7 @@ const D=[
 [6,"Ndili ndi njala","I'm hungry","ndi-li = I-am · ndi = with · njala = hunger","food"],
 [6,"Ndili ndi ludzu","I'm thirsty","ndi-li = I-am · ndi = with · ludzu = thirst","food"],
 [6,"Kodi muli ndi madzi?","Do you have water?","kodi = (Q) · mu-li ndi = you-have · madzi = water","food"],
-[20,"Ndikufuna kugula chakudya","I want to buy food","ndi-ku-funa = I-want · ku-gula = to-buy · chakudya = food","food"],
+[6,"Ndikufuna kugula chakudya","I want to buy food","ndi-ku-funa = I-want · ku-gula = to-buy · chakudya = food","food"],
 [6,"Chokoma!","Delicious!","chi-koma = it-is-tasty","food"],
 [6,"Ndakhuta","I'm full","nda-khuta = I-am-full","food"],
 [20,"Mukugulitsa chiyani?","What are you selling?","mu-ku-gulitsa = you-are-selling · chiyani = what","market"],
@@ -329,11 +329,11 @@ const D=[
 [12,"Mukupita kuti?","Where are you going? (trail Q1)","mu-ku-pita = you-are-going · kuti = where","trail"],
 [20,"Ndikupita ku Nkhata Bay","I'm going to Nkhata Bay","ndi-ku-pita ku = I'm-going-to · Nkhata Bay","trail"],
 [12,"Mukuchokera kuti?","Where are you coming from? (trail Q2)","mu-ku-chokera = you-are-coming-from · kuti = where","trail"],
-[20,"Ndikuchokera ku Monkey Bay","I'm coming from Monkey Bay","ndi-ku-chokera ku = I'm-coming-from · Monkey Bay","trail"],
+[12,"Ndikuchokera ku Monkey Bay","I'm coming from Monkey Bay","ndi-ku-chokera ku = I'm-coming-from · Monkey Bay","trail"],
 [12,"lero","today","today","trail"],
 [12,"mawa","tomorrow","tomorrow","trail"],
 [12,"dzulo","yesterday","yesterday","trail"],
-[20,"Ndikupita ku Likoma mawa","I'm going to Likoma tomorrow","ndi-ku-pita ku = I'm-going-to · Likoma · mawa = tomorrow","trail"],
+[12,"Ndikupita ku Likoma mawa","I'm going to Likoma tomorrow","ndi-ku-pita ku = I'm-going-to · Likoma · mawa = tomorrow","trail"],
 [12,"Ndikuthamanga","I'm running","ndi-ku-thamanga = I-am-running","trail"],
 [12,"Ndikupalasa bwato","I'm paddling a boat/kayak","ndi-ku-palasa = I-am-paddling · bwato = boat","trail"],
 [12,"ulendo","journey","journey","trail"],
@@ -409,7 +409,7 @@ const D=[
 [21,"mwezi","moon / month","moon / month (miyezi = months)","wx"],
 [21,"nyenyezi","stars","stars","wx"],
 [6,"Ndimakonda ___","I like ___","ndi-ma-konda = I-(habitually)-like · ___","talk"],
-[20,"Ndimakonda Malawi","I love Malawi","ndi-ma-konda = I-love · Malawi","talk"],
+[6,"Ndimakonda Malawi","I love Malawi","ndi-ma-konda = I-love · Malawi","talk"],
 [21,"Ndimakonda nsima","I like nsima","ndi-ma-konda = I-like · nsima","talk"],
 [21,"Mumagwira ntchito yanji?","What work do you do? (recognition)","mu-ma-gwira ntchito = you-do-work · yanji = which","talk"],
 [21,"ntchito","work","work","talk"],
@@ -442,11 +442,13 @@ const D=[
 [17,"Ndine wothamanga","I'm a runner","ndine = I-am · wo-thamanga = one-who-runs","me"],
 [17,"Ndikupalasa kayak pa nyanja","I'm paddling a kayak on the lake","ndi-ku-palasa = I-paddle · kayak · pa nyanja = on-the-lake","me"],
 [21,"masiku ambiri","many days","masiku = days · ambiri = many","me"],
-[17,"Ndili pa ulendo wa miyezi iwiri","I'm on a two-month journey","ndi-li pa = I-am-on · ulendo = journey · wa = of · miyezi iwiri = two-months","me"]
+[17,"Ndili pa ulendo wa miyezi iwiri","I'm on a two-month journey","ndi-li pa = I-am-on · ulendo = journey · wa = of · miyezi iwiri = two-months","me"],
+[6,"Kodi kuli madzi?","Is there water?","kodi = (Q) · kuli = there-is · madzi = water","food"],
+[10,"Kodi kuli malo ogona pano?","Is there a place to sleep here?","kodi = (Q) · kuli = there-is · malo ogona = place-to-sleep · pano = here","camp"]
 ];
 
 // ---------------- STATE ----------------
-const BUILD="2026-06-16 18:04 UTC";
+const BUILD="2026-06-16 18:11 UTC";
 const KEY="chichewa-trainer-v1";
 let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
