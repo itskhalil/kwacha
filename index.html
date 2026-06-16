@@ -110,7 +110,7 @@ input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--li
       <div class="srow"><span>Direction</span><button id="dirBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600"></button></div>
       <div class="srow"><span>Progress backup</span><span><button id="expBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export</button> <button id="impBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Import</button></span></div>
       <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
-      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-16 18:11 UTC</b></div>
+      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-16 18:25 UTC</b></div>
     </div>
   </div>
 
@@ -370,7 +370,7 @@ const D=[
 [20,"Ndikufuna thandizo","I need help","ndi-ku-funa = I-need · thandizo = help (noun)","health"],
 [15,"Ndikudwala","I am sick","ndi-ku-dwala = I-am-ill","health"],
 [15,"chipatala","hospital / clinic","hospital / clinic","health"],
-[15,"Chipatala chili kuti?","Where is the clinic?","chipatala = clinic · chili = is · kuti = where","health"],
+[20,"Chipatala chili kuti?","Where is the clinic?","chipatala = clinic · chili = is · kuti = where","health"],
 [15,"mankhwala","medicine","medicine","health"],
 [15,"malungo","malaria / fever","malaria / fever","health"],
 [15,"Ndili ndi malungo","I have malaria / a fever","ndi-li ndi = I-have · malungo = malaria/fever","health"],
@@ -443,12 +443,15 @@ const D=[
 [17,"Ndikupalasa kayak pa nyanja","I'm paddling a kayak on the lake","ndi-ku-palasa = I-paddle · kayak · pa nyanja = on-the-lake","me"],
 [21,"masiku ambiri","many days","masiku = days · ambiri = many","me"],
 [17,"Ndili pa ulendo wa miyezi iwiri","I'm on a two-month journey","ndi-li pa = I-am-on · ulendo = journey · wa = of · miyezi iwiri = two-months","me"],
-[6,"Kodi kuli madzi?","Is there water?","kodi = (Q) · kuli = there-is · madzi = water","food"],
-[10,"Kodi kuli malo ogona pano?","Is there a place to sleep here?","kodi = (Q) · kuli = there-is · malo ogona = place-to-sleep · pano = here","camp"]
+[4,"ali / ili / chili / uli","all = 'is' — agrees with the noun's class","ali (people, madzi) · ili (nyumba) · chili (chimbudzi) · uli (mtengo) — in speech just use 'ali' everywhere and you'll be understood","listen"],
+[11,"pali / kuli / muli","all = 'there is' — agrees with location","pa = exact spot · ku = general area · mu = inside — in speech just default to 'kuli'","listen"],
+[6,"Ndili ndi ___","I have / I feel ___","ndi-li ndi = I-am-with → I have/feel · slot in njala (hunger), ludzu (thirst), malungo (fever)","food"],
+[10,"Ndingathe ku___?","May I ___? (asking permission)","ndi-nga-the = may-I · ku-[verb] = to-[verb] · e.g. kumanga tenti, kusonkha moto, kulowa","camp"],
+[9,"pa- / ku- / m'-","at-a-spot / in-an-area / inside (places)","pa nyanja = at the lake · ku tawuni = to/in town · m'nyumba = in the house — same pa/ku/mu as pano/kuno and pali/kuli/muli","listen"]
 ];
 
 // ---------------- STATE ----------------
-const BUILD="2026-06-16 18:11 UTC";
+const BUILD="2026-06-16 18:25 UTC";
 const KEY="chichewa-trainer-v1";
 let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
