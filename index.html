@@ -456,6 +456,7 @@ const KEY="chichewa-trainer-v1";
 let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
 const today=()=>new Date().toISOString().slice(0,10);
+const dayIdx=ts=>Math.floor(ts/864e5); // UTC calendar-day index, time-of-day ignored
 async function load(){
   if(window.storage){ // claude.ai artifact storage
     try{ const r=await window.storage.get(KEY); if(r&&r.value) S=Object.assign(S,JSON.parse(r.value)); }catch(e){}
@@ -478,8 +479,8 @@ function allCards(){
   return base.concat(S.custom);
 }
 function dueCards(){
-  const now=Date.now();
-  return allCards().filter(c=>S.prog[c.id]&&S.prog[c.id].d<=now);
+  const t=dayIdx(Date.now());
+  return allCards().filter(c=>S.prog[c.id]&&dayIdx(S.prog[c.id].d)<=t);
 }
 function newCards(){
   if(S.intro.date!==today()){S.intro={date:today(),n:0};}
