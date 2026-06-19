@@ -112,6 +112,7 @@ input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--li
         <div class="step"><button id="npdDn">−</button><b id="npdV">15</b><button id="npdUp">+</button></div></div>
       <div class="srow"><span>Direction</span><button id="dirBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600"></button></div>
       <div class="srow"><span>Progress backup</span><span><button id="expBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export</button> <button id="impBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Import</button></span></div>
+      <div class="srow"><span>Toughest cards</span><button id="drillBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export for Claude</button></div>
       <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
       <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-18 14:28 UTC</b></div>
     </div>
@@ -532,6 +533,35 @@ $("impBtn").onclick=()=>{
     S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
     save(); renderHome(); alert("Progress restored.");
   }catch(e){ alert("That doesn't look like a Kwacha backup string."); }
+};
+// Rank seen cards by how much they're struggling: lapses weigh most, then
+// being stuck relearning, then a short current interval (shaky recall).
+function strugglers(){
+  const byId={}; allCards().forEach(c=>byId[c.id]=c);
+  const rows=[];
+  for(const id in S.prog){
+    const c=byId[id]; if(!c)continue;
+    const p=S.prog[id], lapses=p.l||0, relearning=p.r===0&&lapses>0;
+    if(lapses>0||relearning){
+      const score=lapses*10+(relearning?5:0)+(p.r?Math.max(0,15-(p.i||0)):8);
+      rows.push({c,lapses,relearning,score});
+    }
+  }
+  return rows.sort((a,b)=>b.score-a.score);
+}
+$("drillBtn").onclick=async()=>{
+  const rows=strugglers();
+  if(!rows.length){ alert("No struggling cards yet — keep reviewing and check back once you've lapsed a few."); return; }
+  const lines=rows.map((r,i)=>{
+    const c=r.c, tag=r.relearning?"relearning":"lapsed "+r.lapses+"×";
+    return (i+1)+". "+c.ny+" — "+c.en+(c.gl?"  ("+c.gl+")":"")+"  ["+tag+"]";
+  });
+  const out="I'm learning Chichewa and these are the cards I keep getting wrong. "+
+    "Please drill me on them: quiz me one at a time (mix both directions — English→Chichewa and Chichewa→English), "+
+    "wait for my answer, tell me if I'm right, and give a quick memory hook or breakdown when I miss one. "+
+    "Start when I say go.\n\nMy "+rows.length+" toughest cards (hardest first):\n\n"+lines.join("\n");
+  try{ await navigator.clipboard.writeText(out); alert("Copied "+rows.length+" struggling cards to your clipboard — paste into a chat with Claude to start drilling."); }
+  catch(e){ prompt("Copy this and paste it into Claude:",out); }
 };
 $("goBrowse").onclick=()=>{renderBrowse();show("browse");};
 $("goAdd").onclick=()=>show("add");
