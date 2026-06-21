@@ -62,12 +62,9 @@ button{font:inherit;cursor:pointer;border:none;border-radius:var(--r)}
 .topnav button{background:none;color:var(--mut);font-weight:500;padding:6px}
 /* browse + add */
 input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);margin-bottom:10px}
-.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:10px}
-.bitem .btext{flex:1;min-width:0}
+.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px}
 .bitem b{font-family:"Bricolage Grotesque";font-weight:600}
 .bitem span{color:var(--mut)}
-.del{flex:none;width:32px;height:32px;border-radius:10px;background:var(--bg);border:1px solid var(--line);color:var(--mut);font-size:14px;line-height:1}
-.del:hover{background:#FBEAE3;border-color:#EFC4B4;color:#8C3A1F}
 .dchip{display:inline-block;font-size:10px;color:var(--mut);margin-left:6px}
 .done{ text-align:center;padding:30px 10px}
 .done .disp{font-size:28px;font-weight:800;margin:10px 0 6px}
@@ -112,9 +109,8 @@ input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--li
         <div class="step"><button id="npdDn">−</button><b id="npdV">15</b><button id="npdUp">+</button></div></div>
       <div class="srow"><span>Direction</span><button id="dirBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600"></button></div>
       <div class="srow"><span>Progress backup</span><span><button id="expBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export</button> <button id="impBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Import</button></span></div>
-      <div class="srow"><span>Toughest cards</span><button id="drillBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export for Claude</button></div>
       <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
-      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-18 14:28 UTC</b></div>
+      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-21 · deck v2</b></div>
     </div>
   </div>
 
@@ -284,22 +280,22 @@ const D=[
 [20,"anyezi","onions","onions","food"],
 [20,"mchere","salt","salt","food"],
 [20,"shuga","sugar","sugar","food"],
-[9,"kumanja","right (direction)","on the right","dir"],
-[9,"kumanzere","left","on the left","dir"],
-[9,"patsogolo","ahead / in front","ahead / in front","dir"],
+[13,"kumanja","right (direction)","on the right","dir"],
+[13,"kumanzere","left","on the left","dir"],
+[13,"patsogolo","ahead / in front","ahead / in front","dir"],
 [20,"kumbuyo","behind","behind","dir"],
-[9,"pafupi","near","near","dir"],
-[9,"kutali","far","far","dir"],
+[13,"pafupi","near","near","dir"],
+[13,"kutali","far","far","dir"],
 [20,"Kodi ndi kutali?","Is it far?","kodi = (Q) · ndi = is-it · kutali = far","dir"],
-[9,"msewu","road","road","dir"],
-[9,"njira","path / trail","path / trail","dir"],
-[9,"mudzi","village","village","dir"],
+[13,"msewu","road","road","dir"],
+[13,"njira","path / trail","path / trail","dir"],
+[13,"mudzi","village","village","dir"],
 [20,"tauni","town","town","dir"],
-[9,"nyanja","lake","lake (Nyanja ya Malawi = Lake Malawi)","dir"],
+[13,"nyanja","lake","lake (Nyanja ya Malawi = Lake Malawi)","dir"],
 [20,"mtsinje","river","river","dir"],
 [20,"phiri","mountain / hill","mountain / hill","dir"],
-[9,"Njira yopita ku ___ ili kuti?","Where is the path to ___?","njira = path · yopita ku = going-to · ___ · ili kuti = is-where","dir"],
-[9,"Nditsogolereni, chonde","Please show me the way","ndi-tsogoler-eni = lead-me-(polite) · chonde = please","dir"],
+[13,"Njira yopita ku ___ ili kuti?","Where is the path to ___?","njira = path · yopita ku = going-to · ___ · ili kuti = is-where","dir"],
+[13,"Nditsogolereni, chonde","Please show me the way","ndi-tsogoler-eni = lead-me-(polite) · chonde = please","dir"],
 [10,"tenti","tent","tent","camp"],
 [10,"Ndingathe kumanga tenti pano?","May I pitch my tent here?","ndi-nga-the = may-I · ku-manga = to-pitch · tenti = tent · pano = here","camp"],
 [20,"Ndingathe kugona pano?","May I sleep here?","ndi-nga-the = may-I · ku-gona = to-sleep · pano = here","camp"],
@@ -345,24 +341,24 @@ const D=[
 [20,"Ndikuyenda ulendo kudutsa Malawi","I'm traveling across Malawi","ndi-ku-yenda = I-travel · ulendo = journey · ku-dutsa = passing-through · Malawi","trail"],
 [12,"mzungu / azungu","white person / foreigners","white person / foreigners (friendly)","trail"],
 [18,"Malawi ndi dziko lokongola","Malawi is a beautiful country","Malawi · ndi = is · dziko = country · lokongola = beautiful","trail"],
-[13,"banja","family","family","home"],
-[13,"mwana / ana","child / children","child / children","home"],
+[14,"banja","family","family","home"],
+[14,"mwana / ana","child / children","child / children","home"],
 [20,"nyumba","house","house","home"],
 [18,"Nyumba yanu ndi yokongola","Your house is lovely","nyumba = house · yanu = your · ndi = is · yokongola = beautiful","home"],
 [20,"Zikomo chifukwa cha chakudya","Thank you for the food","zikomo = thanks · chifukwa cha = for · chakudya = food","home"],
 [18,"Ndili ndi tulo","I'm sleepy","ndi-li = I-am · ndi = with · tulo = sleepiness","home"],
-[13,"Ndikufuna kugona","I'd like to sleep","ndi-ku-funa = I-want · ku-gona = to-sleep","home"],
+[14,"Ndikufuna kugona","I'd like to sleep","ndi-ku-funa = I-want · ku-gona = to-sleep","home"],
 [18,"Ndidzuka m'mawa","I'll get up in the morning","ndi-dzuka = I-get-up · m'mawa = in-the-morning","home"],
-[13,"m'mawa","morning","morning","time"],
+[14,"m'mawa","morning","morning","time"],
 [19,"madzulo","evening","evening","time"],
-[13,"Kodi ndingathandize?","Can I help?","kodi = (Q) · ndi-nga-thandize = may-I-help","home"],
-[13,"Ndikufuna kusamba","I'd like to wash / bathe","ndi-ku-funa = I-want · ku-samba = to-wash/bathe","home"],
-[13,"bafa","bathing place / washroom","bathing place / washroom","home"],
+[14,"Kodi ndingathandize?","Can I help?","kodi = (Q) · ndi-nga-thandize = may-I-help","home"],
+[14,"Ndikufuna kusamba","I'd like to wash / bathe","ndi-ku-funa = I-want · ku-samba = to-wash/bathe","home"],
+[14,"bafa","bathing place / washroom","bathing place / washroom","home"],
 [20,"Muli ndi ana angati?","How many children do you have?","mu-li ndi = you-have · ana = children · angati = how-many","home"],
 [18,"Banja langa lili ku Ireland","My family is in Ireland","banja = family · langa = my · lili ku = is-in · Ireland","home"],
 [14,"Odi! Ndingathe kulowa?","Knock knock! May I come in?","odi = (knock) · ndi-nga-the = may-I · ku-lowa = to-enter","camp"],
 [14,"Ndikufuna malo ogona","I'm looking for a place to sleep","ndi-ku-funa = I-want · malo = place · ogona = of-sleeping","camp"],
-[14,"Kodi pali malo ogona pafupi?","Is there a place to sleep nearby?","kodi = (Q) · pali = there-is · malo ogona = place-to-sleep · pafupi = nearby","camp"],
+[9,"Kodi pali malo ogona pafupi?","Is there a place to sleep nearby?","kodi = (Q) · pali = there-is · malo ogona = place-to-sleep · pafupi = nearby","camp"],
 [14,"Ndilipira","I will pay","ndi-lipira = I-will-pay","camp"],
 [14,"Mundithandize?","Can you help me?","mu-ndi-thandize = you-help-me","q"],
 [14,"Palibe","There isn't / none","there isn't / none","q"],
@@ -451,16 +447,24 @@ const D=[
 [11,"pali / kuli / muli","all = 'there is' — agrees with location","pa = exact spot · ku = general area · mu = inside — in speech just default to 'kuli'","listen"],
 [6,"Ndili ndi ___","I have / I feel ___","ndi-li ndi = I-am-with → I have/feel · slot in njala (hunger), ludzu (thirst), malungo (fever)","food"],
 [10,"Ndingathe ku___?","May I ___? (asking permission)","ndi-nga-the = may-I · ku-[verb] = to-[verb] · e.g. kumanga tenti, kusonkha moto, kulowa","camp"],
-[9,"pa- / ku- / m'-","at-a-spot / in-an-area / inside (places)","pa nyanja = at the lake · ku tawuni = to/in town · m'nyumba = in the house — same pa/ku/mu as pano/kuno and pali/kuli/muli","listen"]
+[9,"pa- / ku- / m'-","at-a-spot / in-an-area / inside (places)","pa nyanja = at the lake · ku tawuni = to/in town · m'nyumba = in the house — same pa/ku/mu as pano/kuno and pali/kuli/muli","listen"],
+[9,"malo ogona","a place to sleep / lodging","malo = place · ogona = of-sleeping","camp"],
+[9,"rest house","rest house","English loanword — understood everywhere in Malawi · native = malo ogona","camp"],
+[9,"Kodi ku ___ kuli malo ogona?","Is there a place to sleep in ___? (ask BEFORE you set off)","kodi = (Q) · ku ___ = in-[the next place] · kuli = there-is · malo ogona = place-to-sleep — slot in a village name","camp"],
+[9,"Kodi ku ___ kuli rest house?","Is there a rest house in ___? (ask ahead)","kodi = (Q) · ku ___ = in-[place] · kuli = there-is · rest house","camp"],
+[9,"Ndalama zingati pa usiku?","How much per night?","ndalama = money · zingati = how-many · pa usiku = per-night","camp"],
+[10,"gombe","lakeshore / beach","pa gombe = on the shore / on the beach","camp"],
+[10,"Ndingathe kumanga tenti pa gombe?","May I pitch my tent on the beach?","ndi-nga-the = may-I · ku-manga = to-pitch · tenti = tent · pa gombe = on-the-shore","camp"],
+[11,"Kodi ndi bwino kulowa m'madzi pano?","Is it OK to get in the water here? (kayak put-in)","kodi = (Q) · ndi bwino = is-it-good · ku-lowa m'madzi = to-enter-the-water · pano = here","water"],
+[15,"Kodi madzi awa ndi oyera?","Is this water clean / safe to drink?","kodi = (Q) · madzi awa = this-water · ndi oyera = is-clean","health"]
 ];
 
 // ---------------- STATE ----------------
-const BUILD="2026-06-18 14:28 UTC";
+const BUILD="2026-06-21 (deck v2: lodging machine, beach, put-in)";
 const KEY="chichewa-trainer-v1";
-let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""};
+let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
 const today=()=>new Date().toISOString().slice(0,10);
-const dayIdx=ts=>Math.floor(ts/864e5); // UTC calendar-day index, time-of-day ignored
 async function load(){
   if(window.storage){ // claude.ai artifact storage
     try{ const r=await window.storage.get(KEY); if(r&&r.value) S=Object.assign(S,JSON.parse(r.value)); }catch(e){}
@@ -480,12 +484,11 @@ async function save(){
 }
 function allCards(){
   const base=D.map((c,i)=>({id:"d"+i,day:c[0],ny:c[1],en:c[2],gl:c[3],cat:c[4]}));
-  const del=S.deleted||[];
-  return base.concat(S.custom).filter(c=>!del.includes(c.id));
+  return base.concat(S.custom);
 }
 function dueCards(){
-  const t=dayIdx(Date.now());
-  return allCards().filter(c=>S.prog[c.id]&&dayIdx(S.prog[c.id].d)<=t);
+  const now=Date.now();
+  return allCards().filter(c=>S.prog[c.id]&&S.prog[c.id].d<=now);
 }
 function newCards(){
   if(S.intro.date!==today()){S.intro={date:today(),n:0};}
@@ -530,38 +533,9 @@ $("impBtn").onclick=()=>{
   try{
     const o=JSON.parse(v);
     if(!o||typeof o!=="object"||!("prog" in o)) throw 0;
-    S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
+    S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
     save(); renderHome(); alert("Progress restored.");
   }catch(e){ alert("That doesn't look like a Kwacha backup string."); }
-};
-// Rank seen cards by how much they're struggling: lapses weigh most, then
-// being stuck relearning, then a short current interval (shaky recall).
-function strugglers(){
-  const byId={}; allCards().forEach(c=>byId[c.id]=c);
-  const rows=[];
-  for(const id in S.prog){
-    const c=byId[id]; if(!c)continue;
-    const p=S.prog[id], lapses=p.l||0, relearning=p.r===0&&lapses>0;
-    if(lapses>0||relearning){
-      const score=lapses*10+(relearning?5:0)+(p.r?Math.max(0,15-(p.i||0)):8);
-      rows.push({c,lapses,relearning,score});
-    }
-  }
-  return rows.sort((a,b)=>b.score-a.score);
-}
-$("drillBtn").onclick=async()=>{
-  const rows=strugglers();
-  if(!rows.length){ alert("No struggling cards yet — keep reviewing and check back once you've lapsed a few."); return; }
-  const lines=rows.map((r,i)=>{
-    const c=r.c, tag=r.relearning?"relearning":"lapsed "+r.lapses+"×";
-    return (i+1)+". "+c.ny+" — "+c.en+(c.gl?"  ("+c.gl+")":"")+"  ["+tag+"]";
-  });
-  const out="I'm learning Chichewa and these are the cards I keep getting wrong. "+
-    "Please drill me on them: quiz me one at a time (mix both directions — English→Chichewa and Chichewa→English), "+
-    "wait for my answer, tell me if I'm right, and give a quick memory hook or breakdown when I miss one. "+
-    "Start when I say go.\n\nMy "+rows.length+" toughest cards (hardest first):\n\n"+lines.join("\n");
-  try{ await navigator.clipboard.writeText(out); alert("Copied "+rows.length+" struggling cards to your clipboard — paste into a chat with Claude to start drilling."); }
-  catch(e){ prompt("Copy this and paste it into Claude:",out); }
 };
 $("goBrowse").onclick=()=>{renderBrowse();show("browse");};
 $("goAdd").onclick=()=>show("add");
@@ -664,15 +638,6 @@ function renderBrowse(){
   if(!sel.options.length){
     sel.innerHTML='<option value="0">All days</option>'+Array.from({length:21},(_,i)=>'<option value="'+(i+1)+'">Day '+(i+1)+'</option>').join("")+'<option value="99">My cards</option>';
     sel.onchange=renderBrowse; $("bSearch").oninput=renderBrowse;
-    $("bList").onclick=e=>{
-      const btn=e.target.closest(".del"); if(!btn)return;
-      const id=btn.dataset.id;
-      if(!confirm("Delete this card? This can't be undone."))return;
-      if(String(id).startsWith("u")) S.custom=S.custom.filter(c=>c.id!==id);
-      else { S.deleted=S.deleted||[]; if(!S.deleted.includes(id))S.deleted.push(id); }
-      delete S.prog[id];
-      save(); renderBrowse();
-    };
   }
   const d=+sel.value, q=$("bSearch").value.toLowerCase();
   const list=allCards().filter(c=>{
@@ -681,7 +646,7 @@ function renderBrowse(){
     if(q&&!(c.ny.toLowerCase().includes(q)||c.en.toLowerCase().includes(q)))return false;
     return true;
   });
-  $("bList").innerHTML=list.map(c=>'<div class="bitem"><div class="btext"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div><button class="del" data-id="'+c.id+'" title="Delete card" aria-label="Delete card">✕</button></div>').join("")||'<div class="note">Nothing matches.</div>';
+  $("bList").innerHTML=list.map(c=>'<div class="bitem"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div>').join("")||'<div class="note">Nothing matches.</div>';
 }
 $("bBack").onclick=()=>{show("home");renderHome();};
 
