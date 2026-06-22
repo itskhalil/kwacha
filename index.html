@@ -62,9 +62,12 @@ button{font:inherit;cursor:pointer;border:none;border-radius:var(--r)}
 .topnav button{background:none;color:var(--mut);font-weight:500;padding:6px}
 /* browse + add */
 input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);margin-bottom:10px}
-.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:10px}
+.bitem .btext{flex:1;min-width:0}
 .bitem b{font-family:"Bricolage Grotesque";font-weight:600}
 .bitem span{color:var(--mut)}
+.del{flex:none;width:32px;height:32px;border-radius:10px;background:var(--bg);border:1px solid var(--line);color:var(--mut);font-size:14px;line-height:1}
+.del:hover{background:#FBEAE3;border-color:#EFC4B4;color:#8C3A1F}
 .dchip{display:inline-block;font-size:10px;color:var(--mut);margin-left:6px}
 .done{ text-align:center;padding:30px 10px}
 .done .disp{font-size:28px;font-weight:800;margin:10px 0 6px}
@@ -462,7 +465,7 @@ const D=[
 // ---------------- STATE ----------------
 const BUILD="2026-06-21 (deck v2: lodging machine, beach, put-in)";
 const KEY="chichewa-trainer-v1";
-let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
+let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
 const today=()=>new Date().toISOString().slice(0,10);
 async function load(){
@@ -484,7 +487,8 @@ async function save(){
 }
 function allCards(){
   const base=D.map((c,i)=>({id:"d"+i,day:c[0],ny:c[1],en:c[2],gl:c[3],cat:c[4]}));
-  return base.concat(S.custom);
+  const del=S.deleted||[];
+  return base.concat(S.custom).filter(c=>!del.includes(c.id));
 }
 function dueCards(){
   const now=Date.now();
@@ -533,7 +537,7 @@ $("impBtn").onclick=()=>{
   try{
     const o=JSON.parse(v);
     if(!o||typeof o!=="object"||!("prog" in o)) throw 0;
-    S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
+    S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
     save(); renderHome(); alert("Progress restored.");
   }catch(e){ alert("That doesn't look like a Kwacha backup string."); }
 };
@@ -638,6 +642,15 @@ function renderBrowse(){
   if(!sel.options.length){
     sel.innerHTML='<option value="0">All days</option>'+Array.from({length:21},(_,i)=>'<option value="'+(i+1)+'">Day '+(i+1)+'</option>').join("")+'<option value="99">My cards</option>';
     sel.onchange=renderBrowse; $("bSearch").oninput=renderBrowse;
+    $("bList").onclick=e=>{
+      const btn=e.target.closest(".del"); if(!btn)return;
+      const id=btn.dataset.id;
+      if(!confirm("Delete this card? This can't be undone."))return;
+      if(String(id).startsWith("u")) S.custom=S.custom.filter(c=>c.id!==id);
+      else { S.deleted=S.deleted||[]; if(!S.deleted.includes(id))S.deleted.push(id); }
+      delete S.prog[id];
+      save(); renderBrowse();
+    };
   }
   const d=+sel.value, q=$("bSearch").value.toLowerCase();
   const list=allCards().filter(c=>{
@@ -646,7 +659,7 @@ function renderBrowse(){
     if(q&&!(c.ny.toLowerCase().includes(q)||c.en.toLowerCase().includes(q)))return false;
     return true;
   });
-  $("bList").innerHTML=list.map(c=>'<div class="bitem"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div>').join("")||'<div class="note">Nothing matches.</div>';
+  $("bList").innerHTML=list.map(c=>'<div class="bitem"><div class="btext"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div><button class="del" data-id="'+c.id+'" title="Delete card" aria-label="Delete card">✕</button></div>').join("")||'<div class="note">Nothing matches.</div>';
 }
 $("bBack").onclick=()=>{show("home");renderHome();};
 

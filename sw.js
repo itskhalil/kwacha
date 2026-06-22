@@ -1,4 +1,4 @@
-const C = "kwacha-v3";
+const C = "kwacha-v4";
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(C).then(c => c.addAll(["./"])).then(() => self.skipWaiting()));
