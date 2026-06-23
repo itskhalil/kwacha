@@ -62,9 +62,12 @@ button{font:inherit;cursor:pointer;border:none;border-radius:var(--r)}
 .topnav button{background:none;color:var(--mut);font-weight:500;padding:6px}
 /* browse + add */
 input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);margin-bottom:10px}
-.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+.bitem{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:10px}
+.bitem .btext{flex:1;min-width:0}
 .bitem b{font-family:"Bricolage Grotesque";font-weight:600}
 .bitem span{color:var(--mut)}
+.del{flex:none;width:32px;height:32px;border-radius:10px;background:var(--bg);border:1px solid var(--line);color:var(--mut);font-size:14px;line-height:1}
+.del:hover{background:#FBEAE3;border-color:#EFC4B4;color:#8C3A1F}
 .dchip{display:inline-block;font-size:10px;color:var(--mut);margin-left:6px}
 .done{ text-align:center;padding:30px 10px}
 .done .disp{font-size:28px;font-weight:800;margin:10px 0 6px}
@@ -109,6 +112,7 @@ input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--li
         <div class="step"><button id="npdDn">−</button><b id="npdV">15</b><button id="npdUp">+</button></div></div>
       <div class="srow"><span>Direction</span><button id="dirBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600"></button></div>
       <div class="srow"><span>Progress backup</span><span><button id="expBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export</button> <button id="impBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Import</button></span></div>
+      <div class="srow"><span>Toughest cards</span><button id="drillBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export for Claude</button></div>
       <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
       <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-21 · deck v2</b></div>
     </div>
@@ -462,7 +466,7 @@ const D=[
 // ---------------- STATE ----------------
 const BUILD="2026-06-21 (deck v2: lodging machine, beach, put-in)";
 const KEY="chichewa-trainer-v1";
-let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""};
+let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
 const today=()=>new Date().toISOString().slice(0,10);
 async function load(){
@@ -484,7 +488,8 @@ async function save(){
 }
 function allCards(){
   const base=D.map((c,i)=>({id:"d"+i,day:c[0],ny:c[1],en:c[2],gl:c[3],cat:c[4]}));
-  return base.concat(S.custom);
+  const del=S.deleted||[];
+  return base.concat(S.custom).filter(c=>!del.includes(c.id));
 }
 function dueCards(){
   const now=Date.now();
@@ -533,9 +538,38 @@ $("impBtn").onclick=()=>{
   try{
     const o=JSON.parse(v);
     if(!o||typeof o!=="object"||!("prog" in o)) throw 0;
-    S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
+    S=Object.assign({day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""},o);
     save(); renderHome(); alert("Progress restored.");
   }catch(e){ alert("That doesn't look like a Kwacha backup string."); }
+};
+// Rank seen cards by how much they're struggling: lapses weigh most, then
+// being stuck relearning, then a short current interval (shaky recall).
+function strugglers(){
+  const byId={}; allCards().forEach(c=>byId[c.id]=c);
+  const rows=[];
+  for(const id in S.prog){
+    const c=byId[id]; if(!c)continue;
+    const p=S.prog[id], lapses=p.l||0, relearning=p.r===0&&lapses>0;
+    if(lapses>0||relearning){
+      const score=lapses*10+(relearning?5:0)+(p.r?Math.max(0,15-(p.i||0)):8);
+      rows.push({c,lapses,relearning,score});
+    }
+  }
+  return rows.sort((a,b)=>b.score-a.score);
+}
+$("drillBtn").onclick=async()=>{
+  const rows=strugglers();
+  if(!rows.length){ alert("No struggling cards yet — keep reviewing and check back once you've lapsed a few."); return; }
+  const lines=rows.map((r,i)=>{
+    const c=r.c, tag=r.relearning?"relearning":"lapsed "+r.lapses+"×";
+    return (i+1)+". "+c.ny+" — "+c.en+(c.gl?"  ("+c.gl+")":"")+"  ["+tag+"]";
+  });
+  const out="I'm learning Chichewa and these are the cards I keep getting wrong. "+
+    "Please drill me on them: quiz me one at a time (mix both directions — English→Chichewa and Chichewa→English), "+
+    "wait for my answer, tell me if I'm right, and give a quick memory hook or breakdown when I miss one. "+
+    "Start when I say go.\n\nMy "+rows.length+" toughest cards (hardest first):\n\n"+lines.join("\n");
+  try{ await navigator.clipboard.writeText(out); alert("Copied "+rows.length+" struggling cards to your clipboard — paste into a chat with Claude to start drilling."); }
+  catch(e){ prompt("Copy this and paste it into Claude:",out); }
 };
 $("goBrowse").onclick=()=>{renderBrowse();show("browse");};
 $("goAdd").onclick=()=>show("add");
@@ -638,6 +672,15 @@ function renderBrowse(){
   if(!sel.options.length){
     sel.innerHTML='<option value="0">All days</option>'+Array.from({length:21},(_,i)=>'<option value="'+(i+1)+'">Day '+(i+1)+'</option>').join("")+'<option value="99">My cards</option>';
     sel.onchange=renderBrowse; $("bSearch").oninput=renderBrowse;
+    $("bList").onclick=e=>{
+      const btn=e.target.closest(".del"); if(!btn)return;
+      const id=btn.dataset.id;
+      if(!confirm("Delete this card? This can't be undone."))return;
+      if(String(id).startsWith("u")) S.custom=S.custom.filter(c=>c.id!==id);
+      else { S.deleted=S.deleted||[]; if(!S.deleted.includes(id))S.deleted.push(id); }
+      delete S.prog[id];
+      save(); renderBrowse();
+    };
   }
   const d=+sel.value, q=$("bSearch").value.toLowerCase();
   const list=allCards().filter(c=>{
@@ -646,7 +689,7 @@ function renderBrowse(){
     if(q&&!(c.ny.toLowerCase().includes(q)||c.en.toLowerCase().includes(q)))return false;
     return true;
   });
-  $("bList").innerHTML=list.map(c=>'<div class="bitem"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div>').join("")||'<div class="note">Nothing matches.</div>';
+  $("bList").innerHTML=list.map(c=>'<div class="bitem"><div class="btext"><b>'+c.ny+'</b><span class="dchip">d'+c.day+'</span><br><span>'+c.en+'</span></div><button class="del" data-id="'+c.id+'" title="Delete card" aria-label="Delete card">✕</button></div>').join("")||'<div class="note">Nothing matches.</div>';
 }
 $("bBack").onclick=()=>{show("home");renderHome();};
 
