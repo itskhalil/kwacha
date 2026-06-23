@@ -114,7 +114,7 @@ input,select{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--li
       <div class="srow"><span>Progress backup</span><span><button id="expBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export</button> <button id="impBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Import</button></span></div>
       <div class="srow"><span>Toughest cards</span><button id="drillBtn" style="background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600">Export for Claude</button></div>
       <div class="note">Native audio (free, Peace Corps): <a href="https://www.livelingua.com/course/peace-corps/learning-chichewa-book-1" target="_blank">Live Lingua</a> · <a href="https://www.fsi-language-courses.org/chichewa/courses/peace-corps-learning-chichewa/" target="_blank">FSI mirror</a>. In-country: set new cards to 0 and just review + add what locals teach you.</div>
-      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-21 · deck v2</b></div>
+      <div class="note" style="margin-top:6px;opacity:.7">Version: <b>2026-06-23 · deck v2 · due fix</b></div>
     </div>
   </div>
 
@@ -464,11 +464,12 @@ const D=[
 ];
 
 // ---------------- STATE ----------------
-const BUILD="2026-06-21 (deck v2: lodging machine, beach, put-in)";
+const BUILD="2026-06-23 (deck v2 + day-based due fix)";
 const KEY="chichewa-trainer-v1";
 let S={day:1,npd:15,dir:"EN2NY",prog:{},custom:[],deleted:[],intro:{date:"",n:0},streak:0,lastDone:""};
 let mem=false;
 const today=()=>new Date().toISOString().slice(0,10);
+const dayIdx=ts=>Math.floor(ts/864e5); // UTC calendar-day index, time-of-day ignored
 async function load(){
   if(window.storage){ // claude.ai artifact storage
     try{ const r=await window.storage.get(KEY); if(r&&r.value) S=Object.assign(S,JSON.parse(r.value)); }catch(e){}
@@ -492,8 +493,8 @@ function allCards(){
   return base.concat(S.custom).filter(c=>!del.includes(c.id));
 }
 function dueCards(){
-  const now=Date.now();
-  return allCards().filter(c=>S.prog[c.id]&&S.prog[c.id].d<=now);
+  const t=dayIdx(Date.now());
+  return allCards().filter(c=>S.prog[c.id]&&dayIdx(S.prog[c.id].d)<=t);
 }
 function newCards(){
   if(S.intro.date!==today()){S.intro={date:today(),n:0};}
