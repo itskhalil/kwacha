@@ -596,7 +596,7 @@ function startQueue(q){
 $("start").onclick=()=>{
   const news=newCards();
   const due=dueCards();
-  if(due.length+news.length){ S.intro.n+=news.length; startQueue(shuffle(due.concat(news))); }
+  if(due.length+news.length){ startQueue(shuffle(due.concat(news))); }
   else { startQueue(buildExtra()); }
 };
 function nextCard(){
@@ -629,6 +629,7 @@ function grade(g){ // g: "A" didn't get it, "G" got it
     if(g==="G"){ qi++; nextCard(); return; }
     curr.px=false;
   }
+  const firstSeen=!S.prog[curr.id]; // count a new card as introduced only when it's actually studied
   let p=S.prog[curr.id]||{r:0,i:0,d:0,s:0};
   const now=Date.now();
   if(p.r===0){
@@ -640,7 +641,9 @@ function grade(g){ // g: "A" didn't get it, "G" got it
     if(g==="A"){ p.l=(p.l||0)+1; p.r=0; p.s=1; p.i=0; requeue(); } // lapse: relearn in-session, back to 1 day
     else { p.i=p.i<=1?2:p.i<=2?4:p.i<=4?8:14; p.d=now+p.i*864e5; } // 1→2→4→8→14d cap
   }
-  S.prog[curr.id]=p; qi++; save(); nextCard();
+  S.prog[curr.id]=p;
+  if(firstSeen){ if(S.intro.date!==today()){S.intro={date:today(),n:0};} S.intro.n++; }
+  qi++; save(); nextCard();
 }
 $("gA").onclick=()=>grade("A"); $("gG").onclick=()=>grade("G");
 function finish(){
