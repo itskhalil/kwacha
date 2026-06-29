@@ -420,7 +420,7 @@ function setSun(p){ // p 0..1 → sun rises
 }
 $("dayUp").onclick=()=>{S.day=Math.min(21,S.day+1);save();renderHome();};
 $("dayDn").onclick=()=>{S.day=Math.max(1,S.day-1);save();renderHome();};
-$("npdUp").onclick=()=>{S.npd=Math.min(30,S.npd+5);save();renderHome();};
+$("npdUp").onclick=()=>{S.npd=Math.min(50,S.npd+5);save();renderHome();};
 $("npdDn").onclick=()=>{S.npd=Math.max(0,S.npd-5);save();renderHome();};
 $("dirBtn").onclick=()=>{S.dir=S.dir==="EN2NY"?"NY2EN":"EN2NY";save();renderHome();};
 $("expBtn").onclick=async()=>{
