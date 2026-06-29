@@ -18,7 +18,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;touch-action:manipulation}
 .wrap{max-width:440px;margin:0 auto;padding:18px 16px 40px;min-height:100%}
 h1,h2,.disp{font-family:"Bricolage Grotesque",Inter,sans-serif}
 header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
@@ -420,7 +420,7 @@ function setSun(p){ // p 0..1 → sun rises
 }
 $("dayUp").onclick=()=>{S.day=Math.min(21,S.day+1);save();renderHome();};
 $("dayDn").onclick=()=>{S.day=Math.max(1,S.day-1);save();renderHome();};
-$("npdUp").onclick=()=>{S.npd=Math.min(30,S.npd+5);save();renderHome();};
+$("npdUp").onclick=()=>{S.npd=Math.min(75,S.npd+5);save();renderHome();};
 $("npdDn").onclick=()=>{S.npd=Math.max(0,S.npd-5);save();renderHome();};
 $("dirBtn").onclick=()=>{S.dir=S.dir==="EN2NY"?"NY2EN":"EN2NY";save();renderHome();};
 $("expBtn").onclick=async()=>{
